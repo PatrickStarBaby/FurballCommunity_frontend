@@ -1,0 +1,56 @@
+import passwordMod from '@/common/password.js'
+export default {
+	"account": {
+		"rules": [{
+				required: true,
+				errorMessage: '请输入账号',
+			},
+			{
+				minLength: 6,
+				maxLength: 32,
+				errorMessage: '账号长度在{minLength}到{maxLength}个字符',
+			},
+			{
+				validateFunction: function(rule, value, data, callback) {
+					// console.log(value);
+					// if (/^1\d{10}$/.test(value) || /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(value)) {
+					// 	callback('账号不能是：手机号或邮箱')
+					// };
+					// if (/^\d+$/.test(value)) {
+					// 	callback('账号不能为纯数字')
+					// };
+					if(/[\u4E00-\u9FA5\uF900-\uFA2D]{1,}/.test(value)){
+						callback('账号不能包含中文')
+					}
+					return true
+				}
+			}
+		],
+		"label": "账号"
+	},
+	"nickname": {
+		"rules": [{
+				minLength: 3,
+				maxLength: 32,
+				errorMessage: '用户名长度在 {minLength} 到 {maxLength} 个字符',
+			},
+			{
+				validateFunction: function(rule, value, data, callback) {
+					// console.log(value);
+					// if (/^1\d{10}$/.test(value) || /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(value)) {
+					// 	callback('用户名不能是：手机号或邮箱')
+					// };
+					// if (/^\d+$/.test(value)) {
+					// 	callback('用户名不能为纯数字')
+					// };
+					// if(/[\u4E00-\u9FA5\uF900-\uFA2D]{1,}/.test(value)){
+					// 	callback('用户名不能包含中文')
+					// }
+					return true
+				}
+			}
+		],
+		"label": "用户名"
+	},
+	...passwordMod.getPwdRules()
+}
