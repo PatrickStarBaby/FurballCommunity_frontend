@@ -14,7 +14,7 @@
 
 <script>
 	import uniCaptcha from '@/uni_modules/uni-captcha/components/uni-captcha/uni-captcha.vue'
-
+	import http from '@/utils/http/'
 	function debounce(func, wait) {
 		let timer;
 		wait = wait || 500;
@@ -120,38 +120,57 @@
 						duration: 3000
 					});
 				}
-				uni.request({
-					url: '/baseUrl/api/verifyCaptcha',
-					method: 'POST',
-					header: {
-						'content-type': 'application/json' //自定义请求头信息
-					},
-					data: {
-						"CaptchaId": this.$refs.captcha.captchaId,
-						"VerifyValue": this.captcha
-					},
-					success: (res) => {
-						if (res.data.code === 1) {
-							uni.showToast({
-								title: "图形验证码正确",
-								icon: 'none'
-							});
-							this.sendMsg()
-						} else {
-							uni.showToast({
-								title: "图形验证码错误",
-								icon: 'none'
-							});
-							this.getImageCaptcha()
-						}
-					},
-					fail: (e) => {
+				http.post('/api/verifyCaptcha', {
+					CaptchaId: this.$refs.captcha.captchaId,
+					VerifyValue: this.captcha
+				}).then(res => {
+					if (res.data.code === 1) {
 						uni.showToast({
-							title: e.message,
-							icon: 'none'
+							title: "图形验证码正确",
+							icon: 'none',
 						});
+						this.sendMsg()
+					} else {
+						this.getImageCaptcha()
 					}
-				});
+				}).catch(res => {
+					uni.showToast({
+						title: res.message,
+						icon: 'none'
+					});
+				})
+				// uni.request({
+				// 	url: '/baseUrl/api/verifyCaptcha',
+				// 	method: 'POST',
+				// 	header: {
+				// 		'content-type': 'application/json' //自定义请求头信息
+				// 	},
+				// 	data: {
+				// 		"CaptchaId": this.$refs.captcha.captchaId,
+				// 		"VerifyValue": this.captcha
+				// 	},
+				// 	success: (res) => {
+				// 		if (res.data.code === 1) {
+				// 			uni.showToast({
+				// 				title: "图形验证码正确",
+				// 				icon: 'none'
+				// 			});
+				// 			this.sendMsg()
+				// 		} else {
+				// 			uni.showToast({
+				// 				title: "图形验证码错误",
+				// 				icon: 'none'
+				// 			});
+				// 			this.getImageCaptcha()
+				// 		}
+				// 	},
+				// 	fail: (e) => {
+				// 		uni.showToast({
+				// 			title: e.message,
+				// 			icon: 'none'
+				// 		});
+				// 	}
+				// });
 			},
 			getImageCaptcha(focus) {
 				this.$refs.captcha.getImageCaptcha(focus)
@@ -170,41 +189,67 @@
 					duration: 3000
 				});
 				this.focusSmsCodeInput = true
-				uni.request({
-					url: '/baseUrl/api/sendMsg',
-					method: 'POST',
-					header: {
-						'content-type': 'application/json' //自定义请求头信息
-					},
-					data: {
-						phone: this.phone
-					},
-					success: (res) => {
-						if (res.data.code === 1) {
-							uni.showToast({
-								title: "短信验证码发送成功",
-								icon: 'none',
-								duration: 3000
-							});
-							this.reverseNumber = Number(this.count);
-							this.getCode();
-						} else {
-							this.getImageCaptcha()
-							this.captcha = ""
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'none',
-								duration: 3000
-							});
-						}
-					},
-					fail: (e) => {
+				http.post('/api/sendMsg', {
+					phone: this.phone
+				}).then(res => {
+					if (res.data.code === 1) {
 						uni.showToast({
-							title: e.message,
-							icon: 'none'
+							title: "短信验证码发送成功",
+							icon: 'none',
+							duration: 3000
 						});
+						this.reverseNumber = Number(this.count);
+						this.getCode();
+					} else {
+						this.getImageCaptcha()
+						this.captcha = ""
+						// uni.showToast({
+						// 	title: res.data.msg,
+						// 	icon: 'none',
+						// 	duration: 3000
+						// });
 					}
-				});
+				}).catch(res => {
+					uni.showToast({
+						title: res.message,
+						icon: 'none'
+					});
+				})
+				// uni.request({
+				// 	url: '/baseUrl/api/sendMsg',
+				// 	method: 'POST',
+				// 	header: {
+				// 		'content-type': 'application/json' //自定义请求头信息
+				// 	},
+				// 	data: {
+				// 		phone: this.phone
+				// 	},
+				// 	success: (res) => {
+				// 		if (res.data.code === 1) {
+				// 			uni.showToast({
+				// 				title: "短信验证码发送成功",
+				// 				icon: 'none',
+				// 				duration: 3000
+				// 			});
+				// 			this.reverseNumber = Number(this.count);
+				// 			this.getCode();
+				// 		} else {
+				// 			this.getImageCaptcha()
+				// 			this.captcha = ""
+				// 			uni.showToast({
+				// 				title: res.data.msg,
+				// 				icon: 'none',
+				// 				duration: 3000
+				// 			});
+				// 		}
+				// 	},
+				// 	fail: (e) => {
+				// 		uni.showToast({
+				// 			title: e.message,
+				// 			icon: 'none'
+				// 		});
+				// 	}
+				// });
 			},
 			getCode() {
 				if (this.reverseNumber == 0) {

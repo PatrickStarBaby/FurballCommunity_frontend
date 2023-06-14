@@ -8,7 +8,7 @@
 </template>
 <script>
 	import uniFilePicker from '@/uni_modules/uni-file-picker/components/uni-file-picker/uni-file-picker.vue'
-
+	import storage from '@/utils/storage.js'
 	export default {
 		components: {
 			uniFilePicker
@@ -50,6 +50,10 @@
 				await uni.uploadFile({
 					url: '/baseUrl/api/multiUpload', //后台地址
 					filePath: tempFilePath,
+					header: {
+						'Authorization': 'Bearer ' + storage.getToken(),
+						'UserId': storage.getUserInfo().user_id ? storage.getUserInfo().user_id : ''
+					},
 					name: 'file',
 					success: (uploadFileRes) => {
 						var res = JSON.parse(uploadFileRes.data)

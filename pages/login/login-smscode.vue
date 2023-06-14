@@ -17,6 +17,7 @@
 </template>
 <script>
 	import mixin from '@/common/login-page.mixin.js';
+	import http from '@/utils/http/'
 	export default {
 		mixins: [mixin],
 		data() {
@@ -55,39 +56,53 @@
 						duration: 3000
 					});
 				}
-				uni.request({
-					url: '/baseUrl/user/loginWithPhone',
-					method: 'POST',
-					header: {
-						'content-type': 'application/json' //自定义请求头信息
-					},
-					data: {
-						"phone": this.phone,
-						"code": this.code,
-					},
-					success: (res) => {
-						if (res.data.code === 1) {
-							uni.showToast({
-								title: "登录成功",
-								icon: 'success'
-							});
-						} else {
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'none'
-							});
-						}
-					},
-					fail: (e) => {
+				http.post('/user/loginWithPhone', {phone:this.phone, code: this.code}).then(res => {
+					if (res.data.code === 1) {
 						uni.showToast({
-							title: e.message,
-							icon: 'none'
+							title: res.data.msg,
+							icon: 'success',
+							duration: 3000
 						});
-					},
-					complete: (e) => {
-						this.captcha = ''
+					} else {
 					}
-				});
+				}).catch(res => {
+					console.log(res)
+				}).finally(res => {
+					this.captcha = ''
+				})
+				// uni.request({
+				// 	url: '/baseUrl/user/loginWithPhone',
+				// 	method: 'POST',
+				// 	header: {
+				// 		'content-type': 'application/json' //自定义请求头信息
+				// 	},
+				// 	data: {
+				// 		"phone": this.phone,
+				// 		"code": this.code,
+				// 	},
+				// 	success: (res) => {
+				// 		if (res.data.code === 1) {
+				// 			uni.showToast({
+				// 				title: "登录成功",
+				// 				icon: 'success'
+				// 			});
+				// 		} else {
+				// 			uni.showToast({
+				// 				title: res.data.msg,
+				// 				icon: 'none'
+				// 			});
+				// 		}
+				// 	},
+				// 	fail: (e) => {
+				// 		uni.showToast({
+				// 			title: e.message,
+				// 			icon: 'none'
+				// 		});
+				// 	},
+				// 	complete: (e) => {
+				// 		this.captcha = ''
+				// 	}
+				// });
 			}
 		}
 	}

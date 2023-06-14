@@ -10,8 +10,8 @@
 		</view>
 		<uni-forms ref="form" :value="formData" :rules="rules" validate-trigger="submit" err-show-type="toast">
 			<uni-forms-item name="account" required>
-				<uni-easyinput :inputBorder="false" :focus="focusAccount" @blur="focusAccount = false"
-					class="input-box" placeholder="请输入账号" v-model="formData.account" trim="both" />
+				<uni-easyinput :inputBorder="false" :focus="focusAccount" @blur="focusAccount = false" class="input-box"
+					placeholder="请输入账号" v-model="formData.account" trim="both" />
 			</uni-forms-item>
 			<uni-forms-item name="username">
 				<uni-easyinput :inputBorder="false" :focus="focusUsername" @blur="focusUsername = false"
@@ -46,10 +46,11 @@
 	import uniEasyinput from '@/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue'
 	import uniPopup from '@/uni_modules/uni-popup/components/uni-popup/uni-popup.vue'
 	import uniPopupDialog from '@/uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog.vue'
-	
+
 	import rules from './validator.js';
 	import mixin from '@/common/login-page.mixin.js';
 	import config from '@/common/config.js'
+	import http from '@/utils/http/'
 	import {
 		store,
 		mutations
@@ -105,41 +106,60 @@
 				})
 			},
 			submitForm(params) {
-				console.log(params)
-				uni.request({
-					url: '/baseUrl/user/register',
-					method: 'POST',
-					header: {
-						'content-type': 'application/json' //自定义请求头信息
-					},
-					data: {
-						account: params.account,
-						username: !params.username.length ? params.account : params.username,
-						password: params.password
-					},
-					success: (res) => {
-						if (res.data.code === 1) {
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'success',
-								duration: 3000
-							});
-						} else {
-							this.password = ""
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'none',
-								duration: 3000
-							});
-						}
-					},
-					fail: (e) => {
+				http.post('/user/register', {
+					account: params.account,
+					username: !params.username.length ? params.account : params.username,
+					password: params.password
+				}).then(res => {
+					if (res.data.code === 1) {
 						uni.showToast({
-							title: e.message,
-							icon: 'none'
+							title: res.data.msg,
+							icon: 'success',
+							duration: 3000
 						});
+					} else {
+						this.password = ""
 					}
-				});
+				}).catch(res => {
+					uni.showToast({
+						title: res.message,
+						icon: 'none'
+					});
+				})
+				// uni.request({
+				// 	url: '/baseUrl/user/register',
+				// 	method: 'POST',
+				// 	header: {
+				// 		'content-type': 'application/json' //自定义请求头信息
+				// 	},
+				// 	data: {
+				// 		account: params.account,
+				// 		username: !params.username.length ? params.account : params.username,
+				// 		password: params.password
+				// 	},
+				// 	success: (res) => {
+				// 		if (res.data.code === 1) {
+				// 			uni.showToast({
+				// 				title: res.data.msg,
+				// 				icon: 'success',
+				// 				duration: 3000
+				// 			});
+				// 		} else {
+				// 			this.password = ""
+				// 			uni.showToast({
+				// 				title: res.data.msg,
+				// 				icon: 'none',
+				// 				duration: 3000
+				// 			});
+				// 		}
+				// 	},
+				// 	fail: (e) => {
+				// 		uni.showToast({
+				// 			title: e.message,
+				// 			icon: 'none'
+				// 		});
+				// 	}
+				// });
 			},
 			navigateBack() {
 				uni.navigateBack()

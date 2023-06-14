@@ -41,6 +41,7 @@
 	import uniPopupDialog from '@/uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog.vue'
 	
 	import mixin from '@/common/login-page.mixin.js';
+	import http from '@/utils/http/'
 
 	export default {
 		mixins: [mixin],
@@ -92,40 +93,52 @@
 				if (this.needAgreements && !this.agree) {
 					return this.$refs.agreements.popup(this.pwdLogin)
 				}
-				
-				uni.request({
-					url: '/baseUrl/user/login',
-					method: 'POST',
-					header: {
-						'content-type': 'application/json' //自定义请求头信息
-					},
-					data: {
-						account: this.account,
-						password: this.password
-					},
-					success: (res) => {
-						if (res.data.code === 1) {
-							uni.showToast({
-								title: "登录成功",
-								icon: 'success',
-								duration: 3000
-							});
-						} else {
-							this.password = ""
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'none',
-								duration: 3000
-							});
-						}
-					},
-					fail: (e) => {
+				http.post('/user/login', {account:this.account, password: this.password}).then(res => {
+					if (res.data.code === 1) {
 						uni.showToast({
-							title: e.message,
-							icon: 'none'
+							title: res.data.msg,
+							icon: 'success',
+							duration: 3000
 						});
+					} else {
+						this.password = ""
 					}
-				});
+				}).catch(res => {
+					console.log(res)
+				})
+				// uni.request({
+				// 	url: '/baseUrl/user/login',
+				// 	method: 'POST',
+				// 	header: {
+				// 		'content-type': 'application/json' //自定义请求头信息
+				// 	},
+				// 	data: {
+				// 		account: this.account,
+				// 		password: this.password
+				// 	},
+				// 	success: (res) => {
+				// 		if (res.data.code === 1) {
+				// 			uni.showToast({
+				// 				title: "登录成功",
+				// 				icon: 'success',
+				// 				duration: 3000
+				// 			});
+				// 		} else {
+				// 			this.password = ""
+				// 			uni.showToast({
+				// 				title: res.data.msg,
+				// 				icon: 'none',
+				// 				duration: 3000
+				// 			});
+				// 		}
+				// 	},
+				// 	fail: (e) => {
+				// 		uni.showToast({
+				// 			title: e.message,
+				// 			icon: 'none'
+				// 		});
+				// 	}
+				// });
 				
 			},
 			/* 前往注册 */

@@ -12,6 +12,7 @@
 
 <script>
 	import uniIcons from '@/uni_modules/uni-icons/components/uni-icons/uni-icons.vue'
+	import http from '@/utils/http/'
 	export default {
 		props: {
 			modelValue: String,
@@ -63,24 +64,35 @@
 					this.val = ''
 					this.focusCaptchaInput = true
 				}
-				uni.request({
-					url: '/baseUrl/api/getCaptcha',
-					method: 'GET',
-					success: (res) => {
-						console.log(res);
-						this.captchaBase64 = res.data.data
-						this.captchaId = res.data.captchaId
-					},
-					fail: (e) => {
-						uni.showToast({
-							title: e.message,
-							icon: 'none'
-						});
-					},
-					complete: (e) => {
-						this.loging = false
-					}
-				});
+				http.get('/api/getCaptcha').then((res)=>{
+					this.captchaBase64 = res.data.data
+					this.captchaId = res.data.captchaId
+				}).catch(res => {
+					uni.showToast({
+						title: res.message,
+						icon: 'none'
+					});
+				}).finally(res => {
+					this.loging = false
+				})
+				// uni.request({
+				// 	url: '/baseUrl/api/getCaptcha',
+				// 	method: 'GET',
+				// 	success: (res) => {
+				// 		console.log(res);
+				// 		this.captchaBase64 = res.data.data
+				// 		this.captchaId = res.data.captchaId
+				// 	},
+				// 	fail: (e) => {
+				// 		uni.showToast({
+				// 			title: e.message,
+				// 			icon: 'none'
+				// 		});
+				// 	},
+				// 	complete: (e) => {
+				// 		this.loging = false
+				// 	}
+				// });
 			}
 		}
 	}
