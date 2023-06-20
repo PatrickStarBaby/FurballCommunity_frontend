@@ -5,10 +5,13 @@ import Vue from 'vue'
 import './uni.promisify.adaptor'
 import http from '@/utils/http/'
 import storage from '@/utils/storage.js'
+import router from '@/router/index.js'
+import store from '@/store/index.js'
+Vue.use(router)
+Vue.prototype.$store = store
 Vue.config.productionTip = false
 
 //设置baseUrl
-// http.config.baseUrl = "http://localhost:8080/v1"
 http.config.baseUrl = "/baseUrl"
 //设置请求前拦截器
 http.interceptor.request = (config) => {
@@ -35,12 +38,19 @@ http.interceptor.response = (response) => {
 					} else if (res.cancel) {
 						console.log('用户点击取消');
 					}
+				},
+				complete: () => {
+					// 清除登录信息
+					storage.clearStorage()
+					store.commit("updateLoginStatus", false)
+					store.commit('updateUserInfo', {})
+					store.commit('updateToken', "")
 				}
 			})
 		}
 		return response
 	} else { //莫得问题return这个请求的数据
-		if(response.data.code != 1){
+		if (response.data.code != 1) {
 			uni.showToast({
 				title: response.data.msg,
 				icon: 'none',
@@ -53,9 +63,12 @@ http.interceptor.response = (response) => {
 			'/baseUrl/user/loginWithPhone',
 			'/baseUrl/user/register'
 		]
-		if(urlArr.includes(response.config.url) && response.data.code === 1){
+		if (urlArr.includes(response.config.url) && response.data.code === 1) {
 			storage.storeToken(response.data.token)
 			storage.storeUserInfo(response.data.user)
+			store.commit("updateLoginStatus", true)
+			store.commit('updateUserInfo', response.data.user)
+			store.commit('updateToken', response.data.token)
 		}
 		return response
 	}
@@ -65,6 +78,8 @@ http.interceptor.response = (response) => {
 
 App.mpType = 'app'
 const app = new Vue({
+	router,
+	store,
 	...App
 })
 app.$mount()

@@ -8,8 +8,8 @@
 		<text class="title title-box">账号密码登录</text>
 		<uni-forms>
 			<uni-forms-item name="account">
-				<uni-easyinput :focus="focusAccount" @blur="focusAccount = false" class="input-box"
-					:inputBorder="false" v-model="account" placeholder="请输入账号" />
+				<uni-easyinput :focus="focusAccount" @blur="focusAccount = false" class="input-box" :inputBorder="false"
+					v-model="account" placeholder="请输入账号" />
 			</uni-forms-item>
 			<uni-forms-item name="password">
 				<uni-easyinput :focus="focusPassword" @blur="focusPassword = false" class="input-box" clearable
@@ -39,10 +39,12 @@
 	import uniEasyinput from '@/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue'
 	import uniPopup from '@/uni_modules/uni-popup/components/uni-popup/uni-popup.vue'
 	import uniPopupDialog from '@/uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog.vue'
-	
+
 	import mixin from '@/common/login-page.mixin.js';
 	import http from '@/utils/http/'
-
+	import storage from '@/utils/storage.js'
+	import store from '@/store/index.js'
+	import router from '@/router/index.js'
 	export default {
 		mixins: [mixin],
 		data() {
@@ -93,13 +95,20 @@
 				if (this.needAgreements && !this.agree) {
 					return this.$refs.agreements.popup(this.pwdLogin)
 				}
-				http.post('/user/login', {account:this.account, password: this.password}).then(res => {
+				http.post('/user/login', {
+					account: this.account,
+					password: this.password
+				}).then(res => {
 					if (res.data.code === 1) {
 						uni.showToast({
 							title: res.data.msg,
 							icon: 'success',
 							duration: 3000
 						});
+						// uni.switchTab({
+						// 	url: '/pages/tabBar/index/index'
+						// });
+						router.switchTab({url: '/pages/tabBar/index/index'})
 					} else {
 						this.password = ""
 					}
@@ -139,7 +148,7 @@
 				// 		});
 				// 	}
 				// });
-				
+
 			},
 			/* 前往注册 */
 			toRegister() {

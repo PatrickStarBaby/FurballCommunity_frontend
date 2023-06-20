@@ -1,11 +1,14 @@
 <template>
-	<view>
-		<uni-file-picker v-model="filePathsList" :image-styles="imageStyles" :auto-upload="false" file-mediatype="image"
+	<view class="pd-lr10" style="padding-bottom: 20px;">
+		<uni-file-picker class="" v-model="filePathsList" :image-styles="imageStyles" :auto-upload="false" file-mediatype="image"
 			mode="grid" :limit="9" fileMediatype="image" @select="handleSelect" @delete="handleDelete" />
-		<button type="default" @click="toLogin">登录</button>
-		<button type="default" @click="toLoginSms">验证码登录</button>
+		<view class="mg-tp15 mg-bt5">
+			<text class="ft-18 bold">宠物姓名</text>
+		</view>
+		<input class="uni-input bg-fff h40 pd-lr10 ft-18" placeholder="自动获得焦点" />
 	</view>
 </template>
+
 <script>
 	import uniFilePicker from '@/uni_modules/uni-file-picker/components/uni-file-picker/uni-file-picker.vue'
 	import storage from '@/utils/storage.js'
@@ -15,15 +18,19 @@
 		},
 		data() {
 			return {
+				pet_id:0,
 				filePathsList: [],
 				imgReturnPathList: [], //服务器返回的图片访问路径
-				sizeType: ['compressed'], //设置图片压缩
 				imageStyles: {
 					width: 120,
 					height: 120,
 				},
 				uploadImgIndex: 0, //用于将展示图片与上传路径每一项对应起来
 			}
+		},
+		onLoad(e) {
+			this.pet_id = e.pet_id
+			console.log(this.pet_id)
 		},
 		methods: {
 			async handleSelect(res) {
@@ -32,7 +39,7 @@
 					await this.uploadImg(item, this.uploadImgIndex++);
 				}
 			},
-
+			
 			handleDelete(err) {
 				this.imgReturnPathList.sort(this.sortByindex)
 				// console.log(this.imgReturnPathList)
@@ -44,7 +51,7 @@
 				this.imgReturnPathList.splice(num1, 1);
 				// console.log(this.imgReturnPathList)
 			},
-
+			
 			async uploadImg(tempFilePath, index) {
 				let that = this
 				await uni.uploadFile({
@@ -67,12 +74,12 @@
 					}
 				});
 			},
-
+			
 			// 上传失败
 			fail(e) {
 				console.log('上传失败：', e)
 			},
-
+			
 			sortByindex(a, b) {
 				if (a.index < b.index) {
 					return -1;
@@ -82,17 +89,12 @@
 					return 0;
 				}
 			},
-
-			toLogin() {
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
-			},
-			toLoginSms() {
-				uni.navigateTo({
-					url: '/pages/login/login-withoutpwd'
-				})
-			},
 		}
 	}
 </script>
+
+<style lang="scss" scoped>
+.uni-input{
+	
+}
+</style>
