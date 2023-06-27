@@ -1,5 +1,5 @@
 <template>
-	<view class="" style="padding-bottom: 20px;">
+	<view>
 		<view class="relative">
 			<image class="width-full" style="height: 300px;border-top-right-radius: 25px;border-top-left-radius: 25px;" src="../../static/user_img/user_11.jpg" mode="aspectFill">
 			</image>

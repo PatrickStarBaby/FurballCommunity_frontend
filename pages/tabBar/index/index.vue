@@ -23,7 +23,7 @@
 		</view>
 		<view class="pd-bt15" style="overflow-x: scroll;">
 			<view class="flex flex-direction-row">
-				<view v-for="item in 5" class="relative w150 h200 bd-rd15 mg-rt10 box-shadow" style="flex-shrink: 0;">
+				<view @click="toCarerDetail(item)" v-for="item in 5" class="relative w150 h200 bd-rd15 mg-rt10 box-shadow" style="flex-shrink: 0;">
 					<image class="w150 h150" style="border-top-left-radius: 15px;border-top-right-radius: 15px;"
 						:src="`/static/user_img/user_${item+5}.jpg`" mode="aspectFill"></image>
 					<view class="flex flex-direction-column  absolute width-full bg-fff"
@@ -45,7 +45,7 @@
 			<text class="ft-18 bold">社区活动</text>
 		</view>
 		<view class="">
-			<view v-for="item in 3" class="h80 flex flex-direction-row flex-jsb mg-bt10 pd-bt10"
+			<view @click="toCommunityDetail(item)" v-for="item in 3" class="h80 flex flex-direction-row flex-jsb mg-bt10 pd-bt10"
 				style="border-bottom: 1px solid #ddd;">
 				<image class="h80 w80 bd-rd20 flex-shrink-0" :src="`/static/user_img/user_${item+7}.jpg`"
 					mode="aspectFill"></image>
@@ -90,7 +90,15 @@
 		methods: {
 			toCarerList(){
 				router.switchTab("/pages/tabBar/carerList/carerList")
-			}
+			},
+			toCarerDetail(user_id) {
+				router.navigateTo({
+					url: '/pages/carerDetail/carerDetail?user_id=' + user_id,
+				})
+			},
+			toCommunityDetail(id){
+				router.navigateTo('/pages/communityDetail/communityDetail?blog_id=' + id)
+			},
 		}
 	}
 </script>

@@ -41,7 +41,7 @@
 				<text class="ft-20 color-999 z-index99 text-shadow">新建猫咪卡片</text>
 			</view>
 			<view class="mg-tp30 ">
-				<button class="bd-rd15 box-shadow" style="background-color: #E3D4FD;">发 布 订 单</button>
+				<button @click="toReleaseOrder" class="bd-rd15 box-shadow" style="background-color: #E3D4FD;">发 布 订 单</button>
 			</view>
 		</view>
 	</view>
@@ -65,6 +65,9 @@
 				router.navigateTo({
 					url: '/pages/addPet/addPet?pet_id=' + pet_id,
 				})
+			},
+			toReleaseOrder(){
+				router.navigateTo('/pages/releaseOrder/releaseOrder')
 			},
 		}
 	}

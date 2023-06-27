@@ -385,6 +385,14 @@ button {
 	color: #999999;
 }
 
+.color-aaa {
+	color: #aaaaaa;
+}
+
+.color-bbb {
+	color: #bbbbbb;
+}
+
 .color-ccc {
 	color: #cccccc;
 }
@@ -638,6 +646,10 @@ button {
 	margin-bottom: 50px;
 }
 
+.mg-lt5 {
+	margin-left: 5px;
+}
+
 .mg-lt6 {
 	margin-left: 6px;
 }
@@ -696,6 +708,10 @@ button {
 
 .mg-lt250 {
 	margin-left: 250px;
+}
+
+.mg-rt5 {
+	margin-right: 5px;
 }
 
 .mg-rt10 {
@@ -765,6 +781,10 @@ button {
 /* 内边距 */
 .pd-5 {
 	padding: 5px;
+}
+
+.pd-20 {
+	padding: 20px;
 }
 
 .pd-50 {
@@ -1080,6 +1100,14 @@ button {
 	width: 150px;
 }
 
+.w180 {
+	width: 180px;
+}
+
+.w200 {
+	width: 200px;
+}
+
 .w250 {
 	width: 250px;
 }
@@ -1271,7 +1299,7 @@ button {
 
 /* 防止flex布局元素大小被压缩 */
 .flex-shrink-0 {
-	.flex-shrink: 0;
+	flex-shrink: 0;
 }
 
 .nowrap {

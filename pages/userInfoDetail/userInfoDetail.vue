@@ -1,8 +1,9 @@
+<!-- 用户信息详情 -->
 <template>
 	<view class="pd-lr10" style="padding-bottom: 20px;">
 		<!-- 头像 -->
 		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">上传宠物头像</text>
+			<text class="ft-18 bold">用户头像</text>
 		</view>
 		<uni-file-picker class="" v-model="filePathsList" :image-styles="imageStyles" :auto-upload="false"
 			file-mediatype="image" :del-icon="false" disable-preview mode="grid" :limit="1" fileMediatype="image"
@@ -13,54 +14,14 @@
 		</uni-file-picker>
 		<!-- 昵称 -->
 		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">宠物昵称</text>
+			<text class="ft-18 bold">昵称</text>
 		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物昵称" />
-		<!-- 品种 -->
+		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入昵称" />
+		<!-- 账号 -->
 		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">品种</text>
+			<text class="ft-18 bold">账号</text>
 		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物品种" />
-		<!-- 性别 -->
-		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">性别</text>
-		</view>
-		<radio-group class="flex flex-direction-row" @change="genderRadioChange">
-			<label class="radio">
-				<radio value="1" />
-				<image class="w20 h20" src="../../static/icon/male.png" mode=""></image>
-			</label>
-			<label class="radio mg-lt20">
-				<radio value="0" />
-				<image class="w20 h20" src="../../static/icon/female.png" mode=""></image>
-			</label>
-		</radio-group>
-		<!-- 绝育情况 -->
-		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">绝育情况</text>
-		</view>
-		<radio-group class="flex flex-direction-row" @change="sterilizationRadioChange">
-			<label class="radio">
-				<radio value="1" />
-				<text>已绝育</text>
-			</label>
-			<label class="radio mg-lt20">
-				<radio value="0" />
-				<text>未绝育</text>
-			</label>
-		</radio-group>
-		<!-- 年龄 -->
-		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">年龄</text>
-		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
-			placeholder="请输入宠物年龄,例: 2年3个月" />
-		<!-- 重量 -->
-		<view class="mg-tp15 mg-bt5">
-			<text class="ft-18 bold">重量</text>
-		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
-			placeholder="请输入宠物重量,例: 3kg" />
+		<input placeholder-class="color-ccc" disabled class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物品种" />
 		<!-- 提交按钮 -->
 		<view class="mg-tp30 ">
 			<button class="bd-rd15 box-shadow" style="background-color: #E3D4FD;">确 认 提 交</button>

@@ -76,7 +76,7 @@
             "path" : "pages/carerDetail/carerDetail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "照顾员资料",
                 "enablePullDownRefresh": false
             }
             
@@ -86,6 +86,60 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "照顾员列表",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/communityDetail/communityDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "资讯详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/authentication/authentication",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "认证信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/userInfoDetail/userInfoDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "详细资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/order/order",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的订单",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/addBlog/addBlog",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "发布社区资讯",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/releaseOrder/releaseOrder",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "发布订单",
                 "enablePullDownRefresh": false
             }
             

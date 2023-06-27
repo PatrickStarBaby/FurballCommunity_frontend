@@ -171,6 +171,8 @@
 			}
 		},
 		created() {
+		},
+		onShow() {
 			uni.getLocation({
 				type: 'wgs84',
 				success: (res) => {
@@ -189,7 +191,6 @@
 					this.showMap = true
 				}
 			});
-
 		},
 		onReady() {
 			this._mapContext = uni.createMapContext("map", this);
