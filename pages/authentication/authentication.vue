@@ -33,6 +33,12 @@
 			<text class="ft-18 bold">养宠经历</text>
 		</view>
 		<input placeholder-class="color-ccc" class="bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入养宠经历" />
+		<!-- 地址 -->
+		<view class="mg-tp15 mg-bt5">
+			<text class="ft-18 bold">居住地址</text>
+		</view>
+		<input placeholder-class="color-ccc" class="bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入居住地址" />
+		
 		<!-- 每天可工作时间 -->
 		<view class="mg-tp15 mg-bt5">
 			<text class="ft-18 bold">每天可工作时间</text>

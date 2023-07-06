@@ -30,6 +30,11 @@
 				</view>
 			</view>
 		</view>
+		<view class="mg-tp30 flex flex-ac flex-jsb">
+			<input v-model="comment" placeholder-class="color-ccc"
+				class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" style="width: 80%;" placeholder="评论" />
+				<button class="bg-66C7FA ft-14" style="width: 15%;">发送</button>
+		</view>
 	</view>
 </template>
 
@@ -46,7 +51,8 @@
 					'/static/user_img/user_5.jpg',
 					'/static/swiper/swiper_6.jpg',
 					'/static/swiper/swiper_7.jpg',
-				]
+				],
+				comment:'',
 			}
 		},
 		onLoad(e) {

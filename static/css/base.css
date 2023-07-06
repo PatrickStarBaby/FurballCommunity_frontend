@@ -267,12 +267,12 @@ button {
 
 .box-shadow {
 	/* box-shadow: 0 -1px 8px 0 rgba(0, 0, 0, 0.06); */
-	box-shadow: 5px 5px 10px rgba(157,157,157,0.5);
+	box-shadow: 5px 5px 10px rgba(157, 157, 157, 0.5);
 }
 
 .text-shadow {
 	/* box-shadow: 0 -1px 8px 0 rgba(0, 0, 0, 0.06); */
-	text-shadow: 2px 3px 3px rgba(0,0,0,0.3);
+	text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
 .clearfix {
@@ -421,6 +421,10 @@ button {
 	color: #c01920;
 }
 
+.color-66C7FA{
+	color: #66C7FA;
+}
+
 /* 字体 */
 .ft-family-Medium {
 	font-family: PingFang-SC-Medium;
@@ -467,9 +471,21 @@ button {
 	background: #1ccfcf;
 }
 
+.bg-66C7FA {
+	background: #66C7FA;
+}
+
 /* 边框 */
 .bd-1ccfcf {
 	border: 1px solid #1ccfcf;
+}
+
+.bd-66C7FA {
+	border: 1px solid #66C7FA;
+}
+
+.bd-999 {
+	border: 1px solid #999;
 }
 
 .bd-tp-eee {
@@ -522,6 +538,10 @@ button {
 }
 
 /* 外边距 */
+.mg-0 {
+	margin: 0;
+}
+
 .mg-20 {
 	margin: 20px;
 }
@@ -1082,6 +1102,10 @@ button {
 
 .w100 {
 	width: 100px;
+}
+
+.w110 {
+	width: 110px;
 }
 
 .w120 {

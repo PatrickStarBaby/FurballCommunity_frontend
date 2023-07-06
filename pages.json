@@ -49,7 +49,7 @@
             "path" : "pages/tabBar/publish/publish",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "发布订单",
+                "navigationBarTitleText": "添加宠物",
                 "enablePullDownRefresh": false
             }
             
@@ -144,6 +144,51 @@
             }
             
         }
+        ,{
+            "path" : "pages/orderDetail/orderDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "订单详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/punch/punch",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "打卡信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/receiveOrder/receiveOrder",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我收到的订单",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/receivePunch/receivePunch",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "每日打卡",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/uploadPunchImg/uploadPunchImg",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "上传打卡图片",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -170,7 +215,7 @@
 			"pagePath": "pages/tabBar/publish/publish",
 			"iconPath": "static/tabBar/add.png",
 			"selectedIconPath": "static/tabBar/add_active.png",
-			"text": "发布"
+			"text": "宠物"
 		}, {
 			"pagePath": "pages/tabBar/community/community",
 			"iconPath": "static/tabBar/community.png",

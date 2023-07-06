@@ -79,6 +79,7 @@
                 "/baseUrl" : {
                     //app是需要转发的请求(所有带有 /app 前缀的请求都会转发给 target 后的地址(代理1)
                     "target" : "http://127.0.0.1:8080/v1", //目标接口
+					// "target" : "http://47.113.230.181:8080/v1", //目标接口
                     "changeOrigin" : true, //开启代理
                     "secure" : false,
                     "pathRewrite" : {

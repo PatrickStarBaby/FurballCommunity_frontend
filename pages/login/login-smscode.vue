@@ -18,6 +18,7 @@
 <script>
 	import mixin from '@/common/login-page.mixin.js';
 	import http from '@/utils/http/'
+	import router from '@/router/index.js'
 	export default {
 		mixins: [mixin],
 		data() {
@@ -56,15 +57,20 @@
 						duration: 3000
 					});
 				}
-				http.post('/user/loginWithPhone', {phone:this.phone, code: this.code}).then(res => {
+				http.post('/user/loginWithPhone', {
+					phone: this.phone,
+					code: this.code
+				}).then(res => {
 					if (res.data.code === 1) {
 						uni.showToast({
 							title: res.data.msg,
 							icon: 'success',
 							duration: 3000
-						});
-					} else {
-					}
+						})
+						router.switchTab({
+							url: '/pages/tabBar/index/index'
+						})
+					} else {}
 				}).catch(res => {
 					console.log(res)
 				}).finally(res => {
@@ -140,13 +146,14 @@
 		height: 44px;
 		line-height: 44px;
 	}
-	.captcha{
-	    background-color: #F8F8F8;
-	    font-size: 14px;
-	    flex: 1;
-	    padding: 0 9px;
-	    margin-left: 9px;
-	    box-sizing: border-box;
+
+	.captcha {
+		background-color: #F8F8F8;
+		font-size: 14px;
+		flex: 1;
+		padding: 0 9px;
+		margin-left: 9px;
+		box-sizing: border-box;
 	}
 
 	.popup-captcha {

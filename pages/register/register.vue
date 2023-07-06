@@ -30,7 +30,6 @@
 			</uni-forms-item>
 			<uni-id-pages-agreements scope="register" ref="agreements"></uni-id-pages-agreements>
 			<button class="uni-btn" type="primary" @click="submit">注册</button>
-			<button @click="navigateBack" class="register-back">返回</button>
 			<match-media :min-width="690">
 				<view class="link-box">
 					<text class="link" @click="toLogin">已有账号？点此登录</text>
@@ -126,43 +125,6 @@
 						icon: 'none'
 					});
 				})
-				// uni.request({
-				// 	url: '/baseUrl/user/register',
-				// 	method: 'POST',
-				// 	header: {
-				// 		'content-type': 'application/json' //自定义请求头信息
-				// 	},
-				// 	data: {
-				// 		account: params.account,
-				// 		username: !params.username.length ? params.account : params.username,
-				// 		password: params.password
-				// 	},
-				// 	success: (res) => {
-				// 		if (res.data.code === 1) {
-				// 			uni.showToast({
-				// 				title: res.data.msg,
-				// 				icon: 'success',
-				// 				duration: 3000
-				// 			});
-				// 		} else {
-				// 			this.password = ""
-				// 			uni.showToast({
-				// 				title: res.data.msg,
-				// 				icon: 'none',
-				// 				duration: 3000
-				// 			});
-				// 		}
-				// 	},
-				// 	fail: (e) => {
-				// 		uni.showToast({
-				// 			title: e.message,
-				// 			icon: 'none'
-				// 		});
-				// 	}
-				// });
-			},
-			navigateBack() {
-				uni.navigateBack()
 			},
 			toLogin() {
 				uni.navigateTo({

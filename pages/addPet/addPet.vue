@@ -15,23 +15,25 @@
 		<view class="mg-tp15 mg-bt5">
 			<text class="ft-18 bold">宠物昵称</text>
 		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物昵称" />
+		<input v-model="pet_info.pet_name" placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
+			placeholder="请输入宠物昵称" />
 		<!-- 品种 -->
 		<view class="mg-tp15 mg-bt5">
 			<text class="ft-18 bold">品种</text>
 		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物品种" />
+		<input v-model="pet_info.breed" placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
+			placeholder="请输入宠物品种" />
 		<!-- 性别 -->
 		<view class="mg-tp15 mg-bt5">
 			<text class="ft-18 bold">性别</text>
 		</view>
 		<radio-group class="flex flex-direction-row" @change="genderRadioChange">
 			<label class="radio">
-				<radio value="1" />
+				<radio :checked="Boolean(pet_info.gender)" value="1" />
 				<image class="w20 h20" src="../../static/icon/male.png" mode=""></image>
 			</label>
 			<label class="radio mg-lt20">
-				<radio value="0" />
+				<radio :checked="Boolean(!pet_info.gender)" value="0" />
 				<image class="w20 h20" src="../../static/icon/female.png" mode=""></image>
 			</label>
 		</radio-group>
@@ -41,11 +43,11 @@
 		</view>
 		<radio-group class="flex flex-direction-row" @change="sterilizationRadioChange">
 			<label class="radio">
-				<radio value="1" />
+				<radio :checked="Boolean(pet_info.sterilization)" value="1" />
 				<text>已绝育</text>
 			</label>
 			<label class="radio mg-lt20">
-				<radio value="0" />
+				<radio :checked="Boolean(!pet_info.sterilization)" value="0" />
 				<text>未绝育</text>
 			</label>
 		</radio-group>
@@ -53,31 +55,49 @@
 		<view class="mg-tp15 mg-bt5">
 			<text class="ft-18 bold">年龄</text>
 		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
-			placeholder="请输入宠物年龄,例: 2年3个月" />
+		<input v-model="pet_info.age" placeholder-class="color-ccc" type="number"
+			class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物年龄,单位:年" />
 		<!-- 重量 -->
 		<view class="mg-tp15 mg-bt5">
 			<text class="ft-18 bold">重量</text>
 		</view>
-		<input placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
-			placeholder="请输入宠物重量,例: 3kg" />
+		<input v-model="pet_info.weight" placeholder-class="color-ccc" type="number"
+			class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10" placeholder="请输入宠物重量,单位:kg" />
+		<!-- 健康状况 -->
+		<view class="mg-tp15 mg-bt5">
+			<text class="ft-18 bold">健康状况</text>
+		</view>
+		<input v-model="pet_info.health" placeholder-class="color-ccc" class="uni-input bg-fff h40 pd-lr10 ft-18 bd-rd10"
+			placeholder="请输入宠物健康状况" />
 		<!-- 提交按钮 -->
 		<view class="mg-tp30 ">
-			<button class="bd-rd15 box-shadow" style="background-color: #E3D4FD;">确 认 提 交</button>
+			<button @click="commit" class="bd-rd15 box-shadow" style="background-color: #E3D4FD;">确 认 提 交</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	import http from '@/utils/http/'
 	import uniFilePicker from '@/uni_modules/uni-file-picker/components/uni-file-picker/uni-file-picker.vue'
 	import storage from '@/utils/storage.js'
+	import router from '@/router/index.js'
 	export default {
 		components: {
 			uniFilePicker
 		},
 		data() {
 			return {
-				pet_id: 0,
+				pet_info:{
+					pet_name: '',
+					gender: '',
+					age: '',
+					weight: '',
+					sterilization: '',
+					breed: '',
+					health: '',
+					avatar: ''
+				},
+				isModifyFlag: 0,  //是修改还是添加 标志位
 				filePathsList: [],
 				imgReturnPathList: [], //服务器返回的图片访问路径
 				imageStyles: {
@@ -91,10 +111,87 @@
 			}
 		},
 		onLoad(e) {
-			this.pet_id = e.pet_id ? e.pet_id : 0
-			console.log(this.pet_id)
+			if(e.pet_info){
+				this.pet_info = JSON.parse(decodeURIComponent(e.pet_info))
+				this.isModifyFlag = 1
+				console.log(this.pet_info)
+			}else{
+				this.init()
+			}
 		},
 		methods: {
+			init() {
+				this.isModifyFlag = 0
+				this.pet_info = {
+					pet_name: '',
+					gender: '',
+					age: '',
+					weight: '',
+					sterilization: '',
+					breed: '',
+					health: '',
+					avatar: '',
+				}
+			},
+			commit() {
+				let that = this
+				uni.showModal({
+					title: '提示',
+					content: '确定提交吗？',
+					success: function(res) {
+						if (res.confirm) {
+							console.log(that.pet_info.sterilization)
+							// 如果是修改调用修改接口，否则是新增
+							if(that.isModifyFlag){
+								http.put(`/pet/updatePetInfo/${that.pet_info.pet_id}`,{
+									pet_name: that.pet_info.pet_name,
+									gender: parseInt(that.pet_info.gender),
+									age: parseInt(that.pet_info.age),
+									weight: parseInt(that.pet_info.weight),
+									sterilization: parseInt(that.pet_info.sterilization),
+									breed: that.pet_info.breed,
+									health: that.pet_info.health,
+									avatar: that.pet_info.avatar,
+								}).then(res => {
+									if (res.data.code === 1) {
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'success',
+										});
+										router.switchTab('/pages/tabBar/publish/publish')
+									}
+								}).catch(res => {
+									console.log(res)
+								})
+							}else{
+								http.post('/pet/add', {
+									user_id: that.$store.state.userInfo.user_id,
+									pet_name: that.pet_info.pet_name,
+									gender: parseInt(that.pet_info.gender),
+									age: parseInt(that.pet_info.age),
+									weight: parseInt(that.pet_info.weight),
+									sterilization: parseInt(that.pet_info.sterilization),
+									breed: that.pet_info.breed,
+									health: that.pet_info.health,
+									avatar: that.pet_info.avatar,
+								}).then(res => {
+									if (res.data.code === 1) {
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'success',
+											duration: 3000
+										});
+										router.switchTab('/pages/tabBar/publish/publish')
+									}
+								}).catch(res => {
+									console.log(res)
+								})
+							}
+							
+						} else if (res.cancel) {}
+					}
+				});
+			},
 			async handleSelect(res) {
 				for (let item of res.tempFilePaths) {
 					//为了适配所有平台，每循环一次就调用接口上传一次
@@ -132,7 +229,7 @@
 							name: "",
 							index
 						}]
-						console.log('imgReturnPathList', that.imgReturnPathList);
+						this.pet_info.avatar = res.paths[0]
 					}
 				});
 			},
@@ -154,9 +251,11 @@
 
 			genderRadioChange(e) {
 				console.log(e.detail.value)
+				this.pet_info.gender = parseInt(e.detail.value)
 			},
 			sterilizationRadioChange(e) {
 				console.log(e.detail.value)
+				this.pet_info.sterilization = parseInt(e.detail.value)
 			}
 		}
 	}

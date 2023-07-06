@@ -42,8 +42,6 @@
 
 	import mixin from '@/common/login-page.mixin.js';
 	import http from '@/utils/http/'
-	import storage from '@/utils/storage.js'
-	import store from '@/store/index.js'
 	import router from '@/router/index.js'
 	export default {
 		mixins: [mixin],
@@ -105,9 +103,6 @@
 							icon: 'success',
 							duration: 3000
 						});
-						// uni.switchTab({
-						// 	url: '/pages/tabBar/index/index'
-						// });
 						router.switchTab({url: '/pages/tabBar/index/index'})
 					} else {
 						this.password = ""

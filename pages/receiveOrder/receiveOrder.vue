@@ -81,21 +81,21 @@
 								<button @click.stop="cancel(item)" v-if="item.status == 0" style="white-space: nowrap;"
 									class="mg-lt20 ft-14 pd-lr10 bd-rd20 color-999 bd-999 bg-fff">取消订单</button>
 								<button style="white-space: nowrap;"
-									class="mg-lt10 ft-14 pd-lr10 bd-rd20 color-fff bg-1ccfcf">联系喂养员</button>
-								<button @click.stop="pay(item)" v-if="item.status == 0" style="white-space: nowrap;"
-									class="mg-lt10 ft-14 pd-lr10 bd-rd20 bd-1ccfcf color-1ccfcf bg-fff">立即支付</button>
+									class="mg-lt10 ft-14 pd-lr10 bd-rd20 color-fff bg-1ccfcf">联系寄养员</button>
 								<button @click.stop="toPunch(item)" v-if="item.status == 1" style="white-space: nowrap;"
 									class="mg-lt10 ft-14 pd-lr10 bd-rd20 bd-1ccfcf color-1ccfcf bg-fff">打卡信息</button>
-								<button @click.stop="toComment(item)" v-if="item.status == 2" style="white-space: nowrap;"
-									class="mg-lt10 ft-14 pd-lr10 bd-rd20 bd-1ccfcf color-1ccfcf bg-fff">立即评价</button>
+								<button @click.stop="toFinish(item)" v-if="item.status == 1"
+									style="white-space: nowrap;"
+									class="mg-lt10 ft-14 pd-lr10 bd-rd20 bd-66C7FA color-66C7FA bg-fff">完成订单</button>
+								<button @click.stop="toComment(item)" v-if="item.status == 3"
+									style="white-space: nowrap;"
+									class="mg-lt10 ft-14 pd-lr10 bd-rd20 bd-1ccfcf color-1ccfcf bg-fff">查看用户评价</button>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-		<key-words :mix="true" :show_key="show_pay" :price="orderInfo.price+''" @closeFuc="closeFuc"
-			@getPassword="getPassword"></key-words>
 	</view>
 </template>
 
@@ -111,8 +111,6 @@
 				tab_index: 0,
 				orderList: [],
 				orderStatusList: [],
-				show_pay: false,
-				orderInfo: {},
 			}
 		},
 		onShow() {
@@ -120,9 +118,9 @@
 		},
 		methods: {
 			getOrderList() {
-				http.get(`/order/getOrderList/${this.$store.state.userInfo.user_id}`).then(res => {
+				http.get(`/order/getOrderOfReceiver/${this.$store.state.userInfo.user_id}`).then(res => {
 					if (res.data.code === 1) {
-						this.orderList = res.data.order_list
+						this.orderList = res.data.order?res.data.order:[]
 						this.orderList.forEach(item => {
 							item.announce_time = convertDateTimeStringToDate(item.announce_time)
 						})
@@ -144,44 +142,16 @@
 			toOrderDetail(index) {
 				router.navigateTo({
 					url: '/pages/orderDetail/orderDetail?order_info=' + encodeURIComponent(JSON.stringify(this
-						.orderStatusList[index])),
+						.orderStatusList[index])) + '&isReceiverflag=true',
 				})
 			},
 			closeFuc() {
 				this.show_pay = false;
 			},
-			getPassword(e) {
-				let that = this
-				uni.showLoading()
-				setTimeout(() => {
-					uni.showToast({
-						title: "支付成功",
-						icon: 'success',
-					});
-					that.closeFuc()
-					uni.hideLoading().then(() => {
-						http.put(`/order/updateOrderInfo/${that.orderInfo.order_id}`, {
-							status: 1
-						}).then(res => {
-							if (res.data.code === 1) {
-								that.orderInfo = res.data.data
-								router.navigateTo({
-									url: '/pages/orderDetail/orderDetail?order_info=' +
-										encodeURIComponent(JSON.stringify(that
-											.orderInfo)),
-								})
-							}
-						})
-					})
-				}, 2000)
-			},
-			pay(item) {
-				this.orderInfo = item
-				this.show_pay = true
-			},
+
 			toPunch(item) {
 				router.navigateTo({
-					url: '/pages/punch/punch?order_info=' + encodeURIComponent(JSON.stringify(item)),
+					url: '/pages/receivePunch/receivePunch?order_info=' + encodeURIComponent(JSON.stringify(item)),
 				})
 			},
 			cancel(item){
@@ -198,7 +168,31 @@
 									router.navigateTo({
 										url: '/pages/orderDetail/orderDetail?order_info=' +
 											encodeURIComponent(JSON.stringify(
-												res.data.data)),
+												res.data.data)) + '&isReceiverflag=true',
+									})
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			toFinish(item){
+				let that = this
+				uni.showModal({
+					title: '提示',
+					content: '确定已完成该订单吗？',
+					success: function(res) {
+						if (res.confirm) {
+							http.put(`/order/updateOrderInfo/${item.order_id}`, {
+								status: 2
+							}).then(res => {
+								if (res.data.code === 1) {
+									router.navigateTo({
+										url: '/pages/orderDetail/orderDetail?order_info=' +
+											encodeURIComponent(JSON.stringify(
+												res.data.data)) + '&isReceiverflag=true',
 									})
 								}
 							})
@@ -209,38 +203,15 @@
 				});
 			},
 			toComment(item) {
-				let that = this
-				uni.showModal({
-					title: '订单评价',
-					editable: true,
-					placeholderText: '请输入评价',
-					success: function(res) {
-						if (res.confirm) {
-							http.post('/orderCmt/create', {
-								order_id: item.order_id,
-								user_id: that.$store.state.userInfo.user_id,
-								content: res.content,
-								is_root: true
-							}).then(res => {
-								if (res.data.code === 1) {
-									http.put(`/order/updateOrderInfo/${item.order_id}`, {
-										status: 3
-									}).then(res => {
-										if (res.data.code === 1) {
-											router.navigateTo({
-												url: '/pages/orderDetail/orderDetail?order_info=' +
-													encodeURIComponent(JSON.stringify(
-														res.data.data)),
-											})
-										}
-									})
-								}
-							})
-						} else if (res.cancel) {
-							console.log('用户点击取消');
-						}
+				http.get(`/orderCmt/getOrderCmtList/${item.order_id}`).then(res => {
+					if (res.data.code === 1) {
+						uni.showModal({
+							title: '用户评价',
+							content: res.data.orderCmt_list[0].content,
+							showCancel: false
+						});
 					}
-				});
+				})
 			},
 		}
 	}

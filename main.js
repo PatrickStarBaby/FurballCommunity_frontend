@@ -11,6 +11,9 @@ Vue.use(router)
 Vue.prototype.$store = store
 Vue.config.productionTip = false
 
+import keyWords from "@/components/bian-keywords/index.vue"
+Vue.component('key-words', keyWords)
+
 //设置baseUrl
 http.config.baseUrl = "/baseUrl"
 //设置请求前拦截器
@@ -57,13 +60,15 @@ http.interceptor.response = (response) => {
 				duration: 3000
 			});
 		}
+		// console.log(response.config.url.replace(/\/\d+$/, ""))
 		// 判断是否需要保存token、userInfo信息
 		let urlArr = [
 			'/baseUrl/user/login',
 			'/baseUrl/user/loginWithPhone',
-			'/baseUrl/user/register'
+			'/baseUrl/user/register',
+			'/baseUrl/user/updateUserInfo'
 		]
-		if (urlArr.includes(response.config.url) && response.data.code === 1) {
+		if (urlArr.includes(response.config.url.replace(/\/\d+$/, "")) && response.data.code === 1) {
 			storage.storeToken(response.data.token)
 			storage.storeUserInfo(response.data.user)
 			store.commit("updateLoginStatus", true)
